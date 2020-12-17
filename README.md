@@ -11,3 +11,4 @@ to run the movie subtitle script type in:
  ```
  python tvseries_subtitle.py <tvseries_name> <tvseries_season number>
  ````
+Note: the project is still a work in progress
