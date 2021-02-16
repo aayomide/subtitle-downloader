@@ -6,16 +6,16 @@
 # Automated the download of movie subtitles from Netnaija
 # 
 # ## Usage
-# `
-# python movie_subtitle.py <movie_name>`
+# `python movie_subtitle.py <movie_name>`
 
 import requests
 from bs4 import BeautifulSoup
 import re
 import webbrowser
+import sys
 
 # url to the movie
-search_item = input("Movie Name? : ") 
+search_item = str(sys.argv[1])
 url = 'https://www.thenetnaija.com/search?t=' + search_item
 
 # connect to search results webpage
@@ -43,11 +43,15 @@ movie_url = requests.get(movie_link)
 print(f'Fetching {first_movie_title} movie page ...')
 
 if movie_url.status_code == 200: 
-    print(f'Currently on {first_movie_title} movie page...')
-    movie_page_content = movie_url.content
-    movie_page_soup = BeautifulSoup(movie_page_content, 'html.parser')
+    try:
+        print(f'Currently on {first_movie_title} movie page...')
+        movie_page_content = movie_url.content
+        movie_page_soup = BeautifulSoup(movie_page_content, 'html.parser')
+
+        # select the movie subtitle link and open the subtitle download page on the webbrowser
+        subtitle_link = movie_page_soup.select('.button.download')[2].get('href')
+        print('Opening subtitle download link ...')
+        webbrowser.open_new_tab(subtitle_link)
     
-    # select the movie subtitle link and open the subtitle download page on the webbrowser
-    subtitle_link = movie_page_soup.select('.button.download')[2].get('href')
-    print('Opening subtitle download link ...')
-    webbrowser.open_new_tab(subtitle_link)
+    except:
+        print("Ooops! No subtitle for this movie yet on Netnaija")

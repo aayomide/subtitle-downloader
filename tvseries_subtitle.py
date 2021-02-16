@@ -14,11 +14,19 @@ import requests
 from bs4 import BeautifulSoup
 import re
 import webbrowser
+import sys
 
-import requests
+try:
+    # Python 3.x
+    from urllib.request import urlopen, urlretrieve, quote
+    from urllib.parse import urljoin
+except ImportError:
+    # Python 2.x
+    from urllib import urlopen, urlretrieve, quote
+    from urlparse import urljoin
 
-user_search = input('Series Name? ')
-season = input('What Season? ')
+user_search = str(sys.argv[1])
+season = int(sys.argv[2])
 payload = {'q': user_search}  # q is the name of the input field .. vikings is the search item
 
 base_url = 'http://www.tvsubtitles.net/'
